@@ -23,7 +23,7 @@ services:
       - "11750:8080"            # Puerto 11750 del host redirigido al puerto 8080 del contenedor
     volumes:                    # Volúmenes para montar directorios entre el host y el contenedor
       - .:/home/node/app        # Monta el directorio actual en /home/acoronel/node/app dentro del contenedor
-      - acoronel_node_modules:/home/node/app/node_modules  # Monta el volumen acoronel_node_modules dentro del contenedor
+      - node_modules:/home/node/app/node_modules  # Monta el volumen acoronel_node_modules dentro del contenedor
     networks:                   # Configuración de red para el servicio
       - acoronel_app-network             # Se une a la red llamada app-network
     command: ./wait-for.sh db:27017 -- /home/node/app/node_modules/.bin/nodemon app.js
