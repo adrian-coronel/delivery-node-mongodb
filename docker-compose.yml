@@ -14,11 +14,11 @@ services:
     restart: unless-stopped     # Política de reinicio del contenedor
     env_file: .env              # Archivo de variables de entorno
     environment:                # Variables de entorno adicionales
-      - MYSQL_HOSTNAME=mysqldb
-      - MYSQL_PORT=3306
-      - MYSQL_USER=$MYSQL_USER
-      - MYSQL_PASSWORD=$MYSQL_PASSWORD
-      - MYSQL_DATABASE=$MYSQL_DATABASE
+        - MONGO_USERNAME=$MONGO_USERNAME
+        - MONGO_PASSWORD=$MONGO_PASSWORD
+        - MONGO_HOSTNAME=db
+        - MONGO_PORT=$MONGO_PORT
+        - MONGO_DB=$MONGO_DB
     ports:                      # Mapeo de puertos entre el host y el contenedor
       - "11750:8080"            # Puerto 11750 del host redirigido al puerto 8080 del contenedor
     volumes:                    # Volúmenes para montar directorios entre el host y el contenedor
