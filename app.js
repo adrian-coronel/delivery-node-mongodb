@@ -5,7 +5,7 @@ const db = require('./db');
 const pedidos = require('./routes/pedidos');
 
 const path = __dirname + '/views/';
-const port = 8080;
+const port = process.env.PORT || 11750;
 
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
@@ -14,5 +14,5 @@ app.use(express.static(path));
 app.use('/pedidos', pedidos);
 
 app.listen(port, function () {
-  console.log('Example app listening on port 8080!')
+  console.log(`Example app listening on port ${port}!`);
 })
