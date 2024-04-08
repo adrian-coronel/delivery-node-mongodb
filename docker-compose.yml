@@ -4,13 +4,13 @@ version: '3'
 # Definición de los servicios que compondrán la aplicación
 services:
   # Servicio para la aplicación Node.js
-  nodejs:
+  nodejs-acoronel:
     # Configuración para construir la imagen de Docker para este servicio
     build:
       context: .                 # Contexto para la construcción de la imagen (directorio actual)
       dockerfile: Dockerfile     # Archivo Dockerfile a utilizar
     image: nodejs               # Nombre de la imagen resultante
-    container_name: nodejs      # Nombre del contenedor
+    container_name: nodejs-acoronel      # Nombre del contenedor
     restart: unless-stopped     # Política de reinicio del contenedor
     env_file: .env              # Archivo de variables de entorno
     environment:                # Variables de entorno adicionales
@@ -22,11 +22,11 @@ services:
     ports:                      # Mapeo de puertos entre el host y el contenedor
       - "11750:8080"            # Puerto 11750 del host redirigido al puerto 8080 del contenedor
     volumes:                    # Volúmenes para montar directorios entre el host y el contenedor
-      - .:/home/acoronel/node/app        # Monta el directorio actual en /home/acoronel/node/app dentro del contenedor
-      - acoronel_node_modules:/home/acoronel/node/app/node_modules  # Monta el volumen acoronel_node_modules dentro del contenedor
+      - .:/home/node/app        # Monta el directorio actual en /home/acoronel/node/app dentro del contenedor
+      - acoronel_node_modules:/home/node/app/node_modules  # Monta el volumen acoronel_node_modules dentro del contenedor
     networks:                   # Configuración de red para el servicio
       - acoronel_app-network             # Se une a la red llamada app-network
-    command: ./wait-for.sh db:27017 -- /home/acoronel/node/app/node_modules/.bin/nodemon app.js
+    command: ./wait-for.sh db:27017 -- /home/node/app/node_modules/.bin/nodemon app.js
                                 # Comando a ejecutar dentro del contenedor al iniciarlo
 
   # Servicio para la base de datos MongoDB
@@ -52,4 +52,3 @@ networks:
 volumes:
   acoronel_dbdata:                       # Volumen llamado acoronel_dbdata
   acoronel_node_modules:                 # Volumen llamado acoronel_node_modules
-1
