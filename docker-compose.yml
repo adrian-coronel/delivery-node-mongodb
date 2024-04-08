@@ -14,11 +14,11 @@ services:
     restart: unless-stopped     # Política de reinicio del contenedor
     env_file: .env              # Archivo de variables de entorno
     environment:                # Variables de entorno adicionales
-      - MONGO_USERNAME=$MONGO_USERNAME
-      - MONGO_PASSWORD=$MONGO_PASSWORD
-      - MONGO_HOSTNAME=db
-      - MONGO_PORT=$MONGO_PORT
-      - MONGO_DB=$MONGO_DB
+      - MYSQL_HOSTNAME=mysqldb
+      - MYSQL_PORT=3306
+      - MYSQL_USER=$MYSQL_USER
+      - MYSQL_PASSWORD=$MYSQL_PASSWORD
+      - MYSQL_DATABASE=$MYSQL_DATABASE
     ports:                      # Mapeo de puertos entre el host y el contenedor
       - "11750:8080"            # Puerto 11750 del host redirigido al puerto 8080 del contenedor
     volumes:                    # Volúmenes para montar directorios entre el host y el contenedor
@@ -26,22 +26,20 @@ services:
       - node_modules:/home/node/app/node_modules  # Monta el volumen acoronel_node_modules dentro del contenedor
     networks:                   # Configuración de red para el servicio
       - acoronel_app-network             # Se une a la red llamada app-network
-    command: ./wait-for.sh db:27017 -- /home/node/app/node_modules/.bin/nodemon app.js
+    command: ./wait-for.sh mysqldb:3306 -- /home/node/app/node_modules/.bin/nodemon app.js
                                 # Comando a ejecutar dentro del contenedor al iniciarlo
 
-  # Servicio para la base de datos MongoDB
-  db-acoronel:
-    image: mongo:4.1.8-xenial  # Imagen de MongoDB a utilizar
-    container_name: db-acoronel          # Nombre del contenedor
-    restart: unless-stopped     # Política de reinicio del contenedor
-    env_file: .env              # Archivo de variables de entorno
-    environment:                # Variables de entorno adicionales
-      - MONGO_INITDB_ROOT_USERNAME=$MONGO_USERNAME
-      - MONGO_INITDB_ROOT_PASSWORD=$MONGO_PASSWORD
-    volumes:                    # Volúmenes para montar directorios entre el host y el contenedor
-      - acoronel_dbdata:/data/db         # Monta el volumen acoronel_dbdata en /data/db dentro del contenedor
-    networks:                   # Configuración de red para el servicio
-      - acoronel_app-network             # Se une a la red llamada acoronel_app-network  
+  mysqldb:
+    image: mysql:5.7
+    restart: unless-stopped
+    env_file: ./.env
+    environment:
+      - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE=$MYSQL_DATABASE
+    ports:
+      - "$MYSQL_LOCAL_PORT:$MYSQL_DOCKER_PORT"
+    volumes:
+      - db:/var/lib/mysql
 
 # Definición de redes que utilizarán los servicios
 networks:
@@ -50,5 +48,5 @@ networks:
 
 # Definición de volúmenes que utilizarán los servicios
 volumes:
-  acoronel_dbdata:                       # Volumen llamado acoronel_dbdata
-  acoronel_node_modules:                 # Volumen llamado acoronel_node_modules
+  db:                       # Volumen llamado db
+  node_modules:                 # Volumen llamado node_modules

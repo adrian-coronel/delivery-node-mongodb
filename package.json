@@ -12,12 +12,15 @@
   "keywords": [
     "nodejs",
     "bootstrap",
-    "express"
+    "express",
+    "mysql"
   ],
   "dependencies": {
     "ejs": "^2.6.1",
     "express": "^4.16.4",
-    "mongoose": "^5.4.10"
+    "mongoose": "^5.4.10",
+    "dotenv": "^10.0.0",
+    "mysql": "^2.18.1"
   },
   "devDependencies": {
     "nodemon": "^1.18.10"
